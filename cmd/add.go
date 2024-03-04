@@ -8,8 +8,8 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+    "github.com/RJ-github/go-todo/todo"
 )
-
 // addCmd represents the add command
 var addCmd = &cobra.Command{
 	Use:   "add",
@@ -19,9 +19,11 @@ var addCmd = &cobra.Command{
 }
 
 func addRun(cmd *cobra.Command, args []string) {
+    var items = []todo.Item{}
     for _, x := range args {
-        fmt.Println(x)
+        items = append(items, todo.Item{Text:x})
     }
+    todo.saveItems("x", items)
 }
 
 func init() {
