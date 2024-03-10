@@ -1,15 +1,16 @@
 /*
 Copyright © 2024 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
 import (
 	"fmt"
+	"log"
 
+	"github.com/RJ-github/go-todo/todo"
 	"github.com/spf13/cobra"
-    "github.com/RJ-github/go-todo/todo"
 )
+
 // addCmd represents the add command
 var addCmd = &cobra.Command{
 	Use:   "add",
@@ -19,15 +20,30 @@ var addCmd = &cobra.Command{
 }
 
 func addRun(cmd *cobra.Command, args []string) {
-    var items = []todo.Item{}
-    for _, x := range args {
-        items = append(items, todo.Item{Text:x})
+    items, err :=
+    todo.ReadItems(dataFile);
+    if err != nil {
+        log.Printf("%v", err)
     }
-    todo.saveItems("x", items)
+    for _, x := range args {
+        item := todo.Item{Text: x}
+        item.SetPriority(priority)
+        items = append(items, item)
+    }
+
+    err = todo.SaveItems(dataFile, items);
+
+    if err != nil {
+        fmt.Errorf("%v", err)
+    }
 }
 
+var priority int
 func init() {
 	rootCmd.AddCommand(addCmd)
+
+    addCmd.Flags().IntVarP(&priority, "priority", "p", 2,
+    "Priority:1,2,3")
 
 	// Here you will define your flags and configuration settings.
 
